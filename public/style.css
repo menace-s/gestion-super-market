@@ -1,0 +1,37 @@
+a.nav-lien.active {
+    color: #fd0201 !important;
+    background: #fd02012b !important;
+}
+
+
+.text-muted{
+    display: none!important;
+}
+
+
+.user-list-item:hover {
+    background-color: #fd0201!important;
+    cursor: pointer;
+}
+.new-message-count {
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 12px;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+
+  .login-wrapper .login-content .form-login .btn-login{
+    background:#fd0201!important;
+    border-color:#fd0201!important;
+  }
+
+
+  .header .header-left .logo img {
+    width: 124px!important;
+}
+
