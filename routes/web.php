@@ -7,6 +7,12 @@ use App\Livewire\PermissionRoleComp;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Livewire\CategorieComp;
+use App\Livewire\ClientComp;
+use App\Livewire\FournisseurComp;
+use App\Livewire\InventaireComp;
+use App\Livewire\MouvementStockComp;
+use App\Livewire\ProduitComp;
 
 Auth::routes();
 
@@ -42,7 +48,30 @@ Route::group([
             ->middleware('can:Permission & rôle');
 
 
+    Route::get("/produit", ProduitComp::class)
+            ->name("produit")
+            ->middleware('can:Permission & rôle');
 
+
+    Route::get("/categorie", CategorieComp::class)
+                ->name("categorie")
+                ->middleware('can:Permission & rôle');
+
+    Route::get("/inventaire", InventaireComp::class)
+            ->name("inventaire")
+            ->middleware('can:Permission & rôle');
+
+    Route::get("/mouvement_stock", MouvementStockComp::class)
+            ->name("mouvement_stock")
+            ->middleware('can:Permission & rôle');
+
+    Route::get("/fournisseur", FournisseurComp::class)
+            ->name("fournisseur")
+            ->middleware('can:Permission & rôle');
+
+    Route::get("/client", ClientComp::class)
+            ->name("client")
+            ->middleware('can:Permission & rôle');
 
 
 });

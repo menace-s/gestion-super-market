@@ -32,6 +32,11 @@ a.nav-lien.active {
 
 
   .header .header-left .logo img {
-    width: 124px!important;
+    width: 180px!important;
+}
+
+
+.login-wrapper .login-content .login-logo img{
+    max-width: 220px !important;
 }
 

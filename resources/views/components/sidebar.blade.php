@@ -14,36 +14,55 @@
                     </ul>
                 </li>
                 <li class="submenu-open">
-                    <h6 class="submenu-hdr">Gestion(s)</h6>
+                    <h6 class="submenu-hdr">Gestion du stock </h6>
 
                     <ul>
                         @can('Chauffeurs')
                         <li>
-                            <a href="" class="nav-lien "><i data-feather="user"></i><span>Produits</span>
+                            <a href="{{route('admin.produit')}}" class="nav-lien {{ setMenuActive('admin.produit') }}"><i data-feather="box"></i><span>Produits</span>
                             </a>
                         </li>
                         @endcan
 
                         @can('Usagers')
 
-                        <li><a href="" class="nav-lien "><i data-feather="users"></i><span>Usagers</span></a></li>
+                        <li><a href="{{route('admin.categorie')}}" class="nav-lien {{ setMenuActive('admin.categorie') }}"><i data-feather="layers"></i><span>Catégories</span></a></li>
 
                         @endcan
 
                         @can('Usagers')
 
-                        <li><a href="" class="nav-lien "><i data-feather="dollar-sign"></i><span>Forfaits</span></a></li>
+                        <li><a href="{{route('admin.mouvement_stock')}}" class="nav-lien {{ setMenuActive('admin.mouvement_stock') }}"><i data-feather="repeat"></i><span>Mouvements de stock</span></a></li>
 
                         @endcan
 
 
                         @can('Transactions')
 
-                        <li><a href="" class="nav-lien "><i data-feather="refresh-cw"></i><span>Transactions</span></a></li>
+                        <li><a href="{{route("admin.inventaire")}}" class="nav-lien {{ setMenuActive('admin.inventaire') }}"><i data-feather="clipboard"></i><span>Inventaires</span></a></li>
 
                         @endcan
 
-                        <li><a href="" class="nav-lien "><i data-feather="maximize"></i><span>QR Codes</span></a></li>
+
+                    </ul>
+                </li>
+
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Gestion des partenaires</h6>
+
+                    <ul>
+                        @can('Chauffeurs')
+                        <li>
+                            <a href="{{route("admin.fournisseur")}}" class="nav-lien {{ setMenuActive('admin.fournisseur') }}"><i data-feather="truck"></i><span>Fournisseurs</span>
+                            </a>
+                        </li>
+                        @endcan
+
+                        @can('Usagers')
+
+                        <li><a href="{{route("admin.client")}}" class="nav-lien {{ setMenuActive('admin.client') }} "><i data-feather="shopping-bag"></i><span>Clients</span></a></li>
+
+                        @endcan
 
                     </ul>
                 </li>
