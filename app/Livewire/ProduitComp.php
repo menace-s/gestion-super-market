@@ -8,7 +8,7 @@ class ProduitComp extends Component
 {
     public function render()
     {
-        return view('livewire.produit-comp')
+        return view('livewire.produit.index')
         ->extends('layouts.app')
             ->section('content');
     }

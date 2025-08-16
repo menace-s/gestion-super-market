@@ -8,7 +8,7 @@ class InventaireComp extends Component
 {
     public function render()
     {
-        return view('livewire.inventaire-comp')
+        return view('livewire.inventaire.index')
         ->extends('layouts.app')
             ->section('content');
     }

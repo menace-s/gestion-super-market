@@ -8,7 +8,7 @@ class CategorieComp extends Component
 {
     public function render()
     {
-        return view('livewire.categorie-comp')
+        return view('livewire.categorie.index')
         ->extends('layouts.app')
             ->section('content');
     }

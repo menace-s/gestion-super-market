@@ -8,7 +8,7 @@ class FournisseurComp extends Component
 {
     public function render()
     {
-        return view('livewire.fournisseur-comp')
+        return view('livewire.fournisseur.index')
         ->extends('layouts.app')
             ->section('content');
     }

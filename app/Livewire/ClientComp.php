@@ -8,7 +8,7 @@ class ClientComp extends Component
 {
     public function render()
     {
-        return view('livewire.client-comp')
+        return view('livewire.client.index')
         ->extends('layouts.app')
             ->section('content');
     }

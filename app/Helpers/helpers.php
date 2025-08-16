@@ -88,16 +88,16 @@ if (!function_exists("getPageTitle")) {
         $routeName = request()->route()->getName();
         $routeTitles = [
             "welcome" => "Tableau de bord",
-            "admin.chauffeurs" => "Chauffeurs",
-            "admin.usagers" => "Usagers",
-            "admin.transaction" =>"Transactions",
-            "admin.qr-code" =>"Qr code",
+            "admin.client" => "Client",
+            "admin.fournisseur" => "Fournisseur",
+            "admin.mouvement_stock" =>"Mouvement de stock",
+            "admin.categorie" =>"Categorie",
             "admin.habilitations.users.index" =>"Utilisateurs",
             "admin.rôle-permission" =>"Rôle & Permissions",
             "admin.profil" =>"Profil",
-            "admin.service-chat" =>"Service chat",
+            "admin.inventaire" =>"Inventaire",
             "admin.historique" =>"Historique",
-            "admin.forfaits" =>"Forfaits",
+            "admin.produit" =>"Produits",
         ];
 
 

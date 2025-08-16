@@ -8,7 +8,7 @@ class MouvementStockComp extends Component
 {
     public function render()
     {
-        return view('livewire.mouvement-stock-comp')
+        return view('livewire.mouvement_stock.index')
         ->extends('layouts.app')
             ->section('content');
     }
