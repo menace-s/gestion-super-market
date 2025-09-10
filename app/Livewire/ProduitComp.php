@@ -20,6 +20,7 @@ class ProduitComp extends Component
     public function rules(){
         if($this->currentPage == PAGEEDITFORM){
             return [
+                'editProduit.sku' => ['required', 'string', Rule::unique('produit', 'sku')->ignore($this->editProduit['id'])],
                 'editProduit.name' => ['required', 'string', 'max:255'],
                 'editProduit.category_id' => ['nullable', 'exists:categories,id'],
                 'editProduit.description' => ['nullable', 'string'],
@@ -31,7 +32,7 @@ class ProduitComp extends Component
             ];
         }
         return [
-            'newProduit.sku' => ['nullable', Rule::unique('produits', 'sku')->ignore($this->editProduit['id'] ?? null)],
+            'newProduit.sku' => 'nullable|string|max:255|unique:produit,sku',
             'newProduit.name' => 'required|string|max:255',
             'newProduit.category_id' => 'nullable|exists:categories,id',
             'newProduit.description' => 'nullable|string',
@@ -72,7 +73,7 @@ class ProduitComp extends Component
     public function addProduit(){
         $validatedData = $this->validate();
         Produit::create($validatedData['newProduit']);
-        $this->reset('newConge');
+        $this->reset('newProduit');
         $this->dispatch('showSuccessMessage', ['message' => 'Produit ajouté avec succès!']);
         $this->goToListeProduit();
     }
@@ -91,7 +92,7 @@ class ProduitComp extends Component
     {
         $this->dispatch("showConfirmMessage", [
             "message" => [
-                "text" => "Vous êtes sur le point de supprimer  $name de la liste des conges . Voulez-vous continuer?",
+                "text" => "Vous êtes sur le point de supprimer  $name de la liste des produits . Voulez-vous continuer?",
                 "title" => "Êtes-vous sûr de continuer?",
                 "type" => "warning",
                 "data" => [
