@@ -21,7 +21,7 @@ class CategorieComp extends Component
     public $visibilieModaleEdit = false;
 
 
-    protected $paginationTheme = "bootstrap";
+    
     protected function rules(){
         if($this->currentPage == PAGEEDITFORM){
             return [

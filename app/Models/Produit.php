@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Categorie;
 class Produit extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'sku',
         'name',

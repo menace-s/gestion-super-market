@@ -2,20 +2,22 @@
 
 namespace App\Livewire;
 
-use Carbon\Carbon;
-use App\Models\Produit;
+// use Carbon\Carbon;
 use Livewire\Component;
+use App\Models\Produit;
 use Livewire\WithPagination;
 use Illuminate\Validation\Rule;
 
 class ProduitComp extends Component
 {
     use Withpagination;
+
     public $search ='';
     public $newProduit = [];
     public $editProduit =[];
     public $currentPage = PAGELIST;
     public $viewProduit = null;
+    
 
     public function rules(){
         if($this->currentPage == PAGEEDITFORM){
@@ -46,7 +48,7 @@ class ProduitComp extends Component
     }
     public function render()
     {
-        Carbon::setLocale('fr');
+        // Carbon::setLocale('fr');
         $searchCriteria = '%' . $this->search . '%';
 
         return view('livewire.produit.index', [
