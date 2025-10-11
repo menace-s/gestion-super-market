@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void
-    {
+    { 
 
 
              // Créer un utilisateur admin
