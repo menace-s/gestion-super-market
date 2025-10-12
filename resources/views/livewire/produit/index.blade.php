@@ -9,7 +9,7 @@
     @endif
 
     @if ($currentPage == PAGELIST)
-             @include('livewire.produit.liste')
+            @include('livewire.produit.liste')
     @endif
     @if($currentPage == PAGEVIEW)
         @include('livewire.produit.views')
