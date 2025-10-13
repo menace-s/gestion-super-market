@@ -10,7 +10,7 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                {{-- Colonne de gauche : Image --}}
+                {{-- Colonne de gauche : Image (inchangée) --}}
                 <div class="col-lg-4 col-sm-12 text-center">
                     @if ($viewProduit->image_path)
                         <img src="{{ Storage::url($viewProduit->image_path) }}" alt="{{ $viewProduit->name }}" class="img-fluid rounded" style="max-height: 300px;">
@@ -19,7 +19,7 @@
                     @endif
                 </div>
 
-                {{-- Colonne de droite : Informations --}}
+                {{-- Colonne de droite : Informations (inchangée) --}}
                 <div class="col-lg-8 col-sm-12">
                     <h3 class="mb-3">{{ $viewProduit->name }}</h3>
                     
@@ -59,7 +59,7 @@
                     </ul>
 
                     <h5 class="mt-4">Description</h5>
-                    <p>
+                    <p class="text">
                         {{ $viewProduit->description ?? 'Aucune description fournie.' }}
                     </p>
                 </div>
@@ -68,9 +68,15 @@
             <hr class="my-4">
 
             <div class="d-flex justify-content-end">
-                <button wire:click.prevent="goToListeProduit" class="btn btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left me-2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                    Retour à la liste
+                
+                <button wire:click.prevent="goToEditProduit({{ $viewProduit->id }})" class="btn btn-primary me-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 me-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                    Modifier le produit
+                </button>
+
+                
+                <button wire:click.prevent="goToListeProduit" class="btn btn-secondary">
+                    Retour
                 </button>
             </div>
         </div>

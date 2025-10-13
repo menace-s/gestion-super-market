@@ -36,7 +36,7 @@
 
 	<!-- jQuery -->
 	<x-script/>
-
+@stack('scripts') 
 
 </body>
 
