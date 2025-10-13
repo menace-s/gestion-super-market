@@ -12,7 +12,7 @@
             @include('livewire.produit.liste')
     @endif
     @if($currentPage == PAGEVIEW)
-        @include('livewire.produit.views')
+        @include('livewire.produit.view')
     @endif    
 
 </div>

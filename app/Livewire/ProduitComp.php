@@ -72,8 +72,9 @@ class ProduitComp extends Component
         ->extends('layouts.app')
             ->section('content');
     }
-    public function goToViewProduit($id){
-        $this->viewProduit=Produit::findOrfail($id);
+    public function showProduit($id){
+        $this->viewProduit = Produit::with('category')->findOrFail($id);
+        // dd($this->viewProduit);
         $this->currentPage = PAGEVIEW;
     } 
     public function goToListeProduit(){
@@ -81,11 +82,11 @@ class ProduitComp extends Component
     }
     public function goToAddProduit(){
         $this->resetErrorBag();
-    $this->newProduit = [];
-    $this->image = null; 
-    
-    
-    $this->newProduit['is_active'] = true; 
+        $this->newProduit = [];
+        $this->image = null; 
+        
+        
+        $this->newProduit['is_active'] = true; 
         $this->currentPage = PAGECREATEFORM;
     }
     public function addProduit()
