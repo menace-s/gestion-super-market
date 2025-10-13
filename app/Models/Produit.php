@@ -20,6 +20,9 @@ class Produit extends Model
         'image_path',
         'is_active',
     ];
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
     
     public function category()
     {

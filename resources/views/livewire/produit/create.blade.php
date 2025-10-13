@@ -1,4 +1,3 @@
-{{-- resources/views/livewire/produit/create.blade.php --}}
 <div class="content">
     <div class="page-header">
         <div class="page-title">

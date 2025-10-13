@@ -9,6 +9,7 @@ use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use App\Models\Categorie;
+use Illuminate\Support\Facades\Storage;
 
 class ProduitComp extends Component
 {
@@ -21,35 +22,38 @@ class ProduitComp extends Component
     public $currentPage = PAGELIST;
     public $viewProduit = null;
     public $image;
+    public $newImage;
     
 
     public function rules(){
-        if($this->currentPage == PAGEEDITFORM){
-            return [
-                'editProduit.sku' => ['required', 'string', Rule::unique('produit', 'sku')->ignore($this->editProduit['id'])],
-                'editProduit.name' => ['required', 'string', 'max:255'],
-                'editProduit.category_id' => ['nullable', 'exists:categories,id'],
-                'editProduit.description' => ['nullable', 'string'],
-                'editProduit.prix_achat' => ['required', 'numeric', 'min:0'],
-                'editProduit.prix_vente' => ['required', 'numeric', 'min:0'],
-                'editProduit.quantity' => ['required', 'integer', 'min:0'],
-                'editProduit.min_stock' => ['required', 'integer', 'min:0'],
-                'editProduit.is_active' => ['boolean'],
-            ];
-        }
+    if($this->currentPage == PAGEEDITFORM){
         return [
-            'newProduit.sku' => 'nullable|string|max:255|unique:produits,sku',
-            'newProduit.name' => 'required|string|max:255',
-            'newProduit.category_id' => 'nullable|exists:categories,id',
-            'newProduit.description' => 'nullable|string',
-            'newProduit.prix_achat' => 'required|numeric|min:0',
-            'newProduit.prix_vente' => 'required|numeric|min:0',
-            'newProduit.quantity' => 'required|integer|min:0',
-            'newProduit.min_stock' => 'required|integer|min:0',
-            // 'newProduit.image_path' => 'nullable|string|max:255',
-            'image' => 'nullable|image|max:2048',
-            'newProduit.is_active' => 'boolean',
+            'editProduit.sku' => ['required', 'string', Rule::unique(Produit::class, 'sku')->ignore($this->editProduit['id'])],
+            'editProduit.name' => ['required', 'string', 'max:255'],
+            'editProduit.category_id' => ['nullable', 'exists:categories,id'],
+            'editProduit.description' => ['nullable', 'string'],
+            'editProduit.prix_achat' => ['required', 'numeric', 'min:0'],
+            'editProduit.prix_vente' => ['required', 'numeric', 'min:0'],
+            'editProduit.quantity' => ['required', 'integer', 'min:0'],
+            'editProduit.min_stock' => ['required', 'integer', 'min:0'],
+            'editProduit.is_active' => ['boolean'],
+            'newImage' => ['nullable', 'image', 'max:2048'], // La règle est ajoutée
         ];
+    }
+    
+    // On passe tout en syntaxe "array" pour la cohérence
+    return [
+        'newProduit.sku' => ['nullable', 'string', 'max:255', Rule::unique(Produit::class, 'sku')],
+        'newProduit.name' => ['required', 'string', 'max:255'],
+        'newProduit.category_id' => ['nullable', 'exists:categories,id'],
+        'newProduit.description' => ['nullable', 'string'],
+        'newProduit.prix_achat' => ['required', 'numeric', 'min:0'],
+        'newProduit.prix_vente' => ['required', 'numeric', 'min:0'],
+        'newProduit.quantity' => ['required', 'integer', 'min:0'],
+        'newProduit.min_stock' => ['required', 'integer', 'min:0'],
+        'newProduit.is_active' => ['boolean'],
+        'image' => ['nullable', 'image', 'max:2048'],
+    ];
     }
     public function render()
     {
@@ -85,37 +89,60 @@ class ProduitComp extends Component
         $this->currentPage = PAGECREATEFORM;
     }
     public function addProduit()
-{
-    // 1. On valide les données du formulaire, y compris notre nouvelle règle pour l'image.
-    $validatedData = $this->validate();
-    $produitData = $validatedData['newProduit'];
+    {
+        // 1. On valide les données du formulaire, y compris notre nouvelle règle pour l'image.
+        $validatedData = $this->validate();
+        $produitData = $validatedData['newProduit'];
 
-    // 2. On gère l'upload de l'image SI elle existe.
-    if ($this->image) {
-        // On stocke l'image dans 'storage/app/public/produits'
-        // et on récupère son chemin.
-        $path = $this->image->store('produits', 'public');
-        
-        // 3. On ajoute le chemin de l'image aux données à sauvegarder.
-        $produitData['image_path'] = $path;
+        // 2. On gère l'upload de l'image SI elle existe.
+        if ($this->image) {
+            // On stocke l'image dans 'storage/app/public/produits'
+            // et on récupère son chemin.
+            $path = $this->image->store('produits', 'public');
+            
+            // 3. On ajoute le chemin de l'image aux données à sauvegarder.
+            $produitData['image_path'] = $path;
+        }
+
+        // 4. On crée le produit avec toutes les données.
+        Produit::create($produitData);
+
+        // 5. On réinitialise les champs et on affiche le message de succès.
+        $this->reset('newProduit', 'image');
+        $this->dispatch('showSuccessMessage', ['message' => 'Produit ajouté avec succès!']);
+        $this->goToListeProduit();
     }
-
-    // 4. On crée le produit avec toutes les données.
-    Produit::create($produitData);
-
-    // 5. On réinitialise les champs et on affiche le message de succès.
-    $this->reset('newProduit', 'image');
-    $this->dispatch('showSuccessMessage', ['message' => 'Produit ajouté avec succès!']);
-    $this->goToListeProduit();
-}
     public function goToEditProduit($id){
-        $this->editProduit = Produit::find($id)->toArray();
+        $this->resetErrorBag();
+        $this->editProduit = Produit::findOrFail($id)->toArray();
+        $this->newImage = null; // On réinitialise le champ de la nouvelle image
         $this->currentPage = PAGEEDITFORM;
     }
-    public function updateProduit(){
+    public function updateProduit()
+    {
+        // 1. On valide les données avec les règles d'édition.
         $validatedData = $this->validate();
+        // dd("validated data =",$validatedData);
+        $produitData = $validatedData['editProduit'];
+        // dd($produitData);
+
+        // 2. On gère la nouvelle image SI elle a été uploadée.
+        if ($this->newImage) {
+            // a. On sauvegarde la nouvelle image.
+            $path = $this->newImage->store('produits', 'public');
+            $produitData['image_path'] = $path;
+
+            // b. On supprime l'ancienne image pour ne pas laisser de fichiers orphelins.
+            if (!empty($this->editProduit['image_path'])) {
+                Storage::disk('public')->delete($this->editProduit['image_path']);
+            }
+        }
+
+        // 3. On récupère le produit et on le met à jour.
         $produit = Produit::find($this->editProduit['id']);
-        $produit->update($validatedData['editProduit']);
+        $produit->update($produitData);
+
+        // 4. On affiche le message de succès et on retourne à la liste.
         $this->dispatch("showSuccessMessage", ["message" => "Produit mis à jour avec succès!"]);
         $this->goToListeProduit();
     }
