@@ -48,22 +48,27 @@
                     </thead>
                     <tbody>
                         @forelse ($produits as $produit)
-                        <tr>
-                            <td>
+                        @php
+                            $lowStockStyle = ($produit->quantity <= $produit->min_stock)
+                                ? 'background-color: rgba(var(--bs-warning-rgb), 0.2) !important;'
+                                : '';
+                        @endphp
+                        <tr wire:key="{{ $produit->id }}" title="{{ $produit->quantity <= $produit->min_stock ? 'Ce produit a atteint son seuil de stock minimum !' : '' }}">
+                            <td style="{{ $lowStockStyle }}">
                                 <div class="productimgname">
                                     {{-- BONNE PRATIQUE : Utiliser le Storage pour les images --}}
                                     <img style="width: 40px; height: 40px; object-fit: cover;" 
-                                         src="{{ $produit->image_path ? Storage::url($produit->image_path) : asset('assets/img/placeholder.jpg') }}" 
-                                         alt="{{ $produit->name }}" class="rounded-circle p-1">
+                                            src="{{ $produit->image_path ? Storage::url($produit->image_path) : asset('assets/img/placeholder.jpg') }}" 
+                                            alt="{{ $produit->name }}" class="rounded-circle p-1">
                                     <a href="javascript:void(0);">{{ $produit->name }}</a>
                                 </div>
                             </td>
-                            <td>{{ $produit->sku }}</td>
+                            <td style="{{ $lowStockStyle }}">{{ $produit->sku }}</td>
                             {{-- BONNE PRATIQUE : Accéder à la relation pour afficher le nom --}}
-                            <td>{{ $produit->category->name ?? 'N/A' }}</td>
-                            <td>{{ number_format($produit->prix_vente, 2, ',', ' ') }} FCFA</td>
-                            <td>{{ $produit->quantity }}</td>
-                            <td class="text-center">
+                            <td style="{{ $lowStockStyle }}">{{ $produit->category->name ?? 'N/A' }}</td>
+                            <td style="{{ $lowStockStyle }}">{{ number_format($produit->prix_vente, 2, ',', ' ') }} FCFA</td>
+                            <td style="{{ $lowStockStyle }}">{{ $produit->quantity }}</td>
+                            <td class="text-center" style="{{ $lowStockStyle }}">
                                 {{-- Visuellement plus clair qu'une checkbox --}}
                                 @if($produit->is_active)
                                     <span class="badge bg-success">Actif</span>
@@ -71,7 +76,7 @@
                                     <span class="badge bg-danger">Inactif</span>
                                 @endif
                             </td>
-                            <td class="action-table-data" style="justify-content: center">
+                            <td class="action-table-data" style="justify-content: center; {{ $lowStockStyle }}">
                                 <div class="edit-delete-action" style="text-align: center">
                                     <a wire:click="showProduit({{ $produit->id }})" class="me-2 p-2" href="javascript:void(0);" title="Voir les détails">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
