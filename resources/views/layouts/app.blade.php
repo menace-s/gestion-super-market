@@ -4,7 +4,7 @@
 <x-head/>
 
 <body>
-	<div id="global-loader">
+	<div id="global-loader"> 
 		<div class="whirly-loader"> </div>
 	</div>
 	<!-- Main Wrapper -->
@@ -21,23 +21,16 @@
 		<div class="page-wrapper">
             @yield("content")
 
-
-        
-
+            {{-- Affichage des pages Livewire (slot) --}}
+            {{ $slot ?? '' }}
 		</div>
-
-
-
 
 	</div>
 	<!-- /Main Wrapper -->
 
-
-
 	<!-- jQuery -->
 	<x-script/>
-@stack('scripts') 
-
+    @stack('scripts') 
 </body>
 
 </html>

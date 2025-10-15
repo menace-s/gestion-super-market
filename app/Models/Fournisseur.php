@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Fournisseur extends Model
 {
     use HasFactory;
+
+
+    protected $table = 'fournisseurs';
+
+
     protected $fillable = [
         'name',
         'contact_name',
@@ -15,10 +20,22 @@ class Fournisseur extends Model
         'phone',
         'adress',
     ];
+
     public function produits()
     {
         return $this->belongsToMany(Produit::class, 'fournisseur_produit')
                     ->withPivot('prix_fournisseur', 'delai_livraison_jours')
                     ->withTimestamps();
     }
+
+
+    protected $casts = [
+        'name' => 'string',
+        'contact_name' => 'string',
+        'email' => 'string',
+        'phone' => 'string',
+        'adress' => 'string',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 }
