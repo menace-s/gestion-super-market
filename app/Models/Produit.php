@@ -28,4 +28,10 @@ class Produit extends Model
     {
         return $this->belongsTo(Categorie::class);
     }
+    public function fournisseurs()
+    {
+        return $this->belongsToMany(Fournisseur::class, 'fournisseur_produit')
+                    ->withPivot('prix_fournisseur', 'delai_livraison_jours')
+                    ->withTimestamps();
+    }
 }

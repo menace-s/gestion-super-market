@@ -1,4 +1,3 @@
-{{-- resources/views/livewire/produit/view.blade.php --}}
 <div class="content">
     <div class="page-header">
         <div class="page-title">
@@ -10,7 +9,7 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                {{-- Colonne de gauche : Image (inchangée) --}}
+                {{-- Colonne de gauche : Image --}}
                 <div class="col-lg-4 col-sm-12 text-center">
                     @if ($viewProduit->image_path)
                         <img src="{{ Storage::url($viewProduit->image_path) }}" alt="{{ $viewProduit->name }}" class="img-fluid rounded" style="max-height: 300px;">
@@ -19,7 +18,7 @@
                     @endif
                 </div>
 
-                {{-- Colonne de droite : Informations (inchangée) --}}
+                {{-- Colonne de droite : Informations --}}
                 <div class="col-lg-8 col-sm-12">
                     <h3 class="mb-3">{{ $viewProduit->name }}</h3>
                     
@@ -62,19 +61,44 @@
                     <p class="text">
                         {{ $viewProduit->description ?? 'Aucune description fournie.' }}
                     </p>
+
+                    {{-- NOUVELLE SECTION : LISTE DES FOURNISSEURS --}}
+                    <h5 class="mt-4">Fournisseurs Associés</h5>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Fournisseur</th>
+                                    <th>Prix d'Achat</th>
+                                    <th>Délai de Livraison</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($viewProduit->fournisseurs as $fournisseur)
+                                    <tr>
+                                        <td>{{ $fournisseur->name }}</td>
+                                        {{-- On accède aux données de la table pivot via l'objet 'pivot' --}}
+                                        <td>{{ number_format($fournisseur->pivot->prix_fournisseur, 0, ',', ' ') }} FCFA</td>
+                                        <td>{{ $fournisseur->pivot->delai_livraison_jours ?? 'N/A' }} jours</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="3" class="text-center text">Aucun fournisseur n'est associé à ce produit.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <hr class="my-4">
 
             <div class="d-flex justify-content-end">
-                
                 <button wire:click.prevent="goToEditProduit({{ $viewProduit->id }})" class="btn btn-primary me-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 me-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                     Modifier le produit
                 </button>
-
-                
                 <button wire:click.prevent="goToListeProduit" class="btn btn-secondary">
                     Retour
                 </button>

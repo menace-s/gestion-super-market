@@ -134,6 +134,73 @@
                     </div>
                 </div>
 
+
+                <hr class="my-4">
+
+                {{-- NOUVELLE SECTION : GESTION DES FOURNISSEURS --}}
+                <div class="row">
+                    <div class="col-12">
+                        <h5 class="mb-3">Fournisseurs Associés</h5>
+                        
+                        {{-- Liste des fournisseurs déjà associés --}}
+                        @if (!empty($editProduit['fournisseurs']))
+                            <ul class="list-group mb-4">
+                                @foreach ($editProduit['fournisseurs'] as $fournisseur)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ $fournisseur['name'] }}</strong>
+                                            <small class="d-block text-muted">
+                                                Prix : {{ number_format($fournisseur['pivot']['prix_fournisseur'], 0, ',', ' ') }} FCFA | 
+                                                Délai : {{ $fournisseur['pivot']['delai_livraison_jours'] ?? 'N/A' }} jours
+                                            </small>
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" wire:click.prevent="detachFournisseur({{ $fournisseur['id'] }})">
+                                            Retirer
+                                        </button>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="text-muted">Aucun fournisseur associé à ce produit pour le moment.</p>
+                        @endif
+
+                        {{-- Formulaire pour ajouter un nouveau fournisseur --}}
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Ajouter un fournisseur</h6>
+                                <div class="row align-items-end">
+                                    <div class="col-md-5">
+                                        <label class="form-label">Fournisseur</label>
+                                        <select class="form-select" wire:model="selectedFournisseur">
+                                            <option value="">Choisir...</option>
+                                            @foreach ($this->allFournisseurs as $fournisseur)
+                                                <option value="{{ $fournisseur->id }}">{{ $fournisseur->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('selectedFournisseur') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Prix (FCFA)</label>
+                                        <input type="number" class="form-control" wire:model="fournisseurPrix">
+                                        @error('fournisseurPrix') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Délai (jours)</label>
+                                        <input type="number" class="form-control" wire:model="fournisseurDelai">
+                                        @error('fournisseurDelai') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-success w-100" wire:click.prevent="addFournisseur">
+                                            Ajouter
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <hr class="my-4">
 
                 {{-- SECTION 4 : Actions --}}

@@ -10,6 +10,8 @@ use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use App\Models\Categorie;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Fournisseur;
+
 
 class ProduitComp extends Component
 {
@@ -23,8 +25,16 @@ class ProduitComp extends Component
     public $viewProduit = null;
     public $image;
     public $newImage;
-    
 
+    // Propriétés pour le formulaire d'ajout de fournisseur
+    public $selectedFournisseur;
+    public $fournisseurPrix;
+    public $fournisseurDelai;
+    
+    public function getAllFournisseursProperty()
+    {
+        return Fournisseur::orderBy('name')->get();
+    }
     public function rules(){
     if($this->currentPage == PAGEEDITFORM){
         return [
@@ -73,7 +83,7 @@ class ProduitComp extends Component
             ->section('content');
     }
     public function showProduit($id){
-        $this->viewProduit = Produit::with('category')->findOrFail($id);
+        $this->viewProduit = Produit::with(['category', 'fournisseurs'])->findOrFail($id);
         // dd($this->viewProduit);
         $this->currentPage = PAGEVIEW;
     } 
@@ -114,9 +124,12 @@ class ProduitComp extends Component
         $this->goToListeProduit();
     }
     public function goToEditProduit($id){
+
         $this->resetErrorBag();
-        $this->editProduit = Produit::findOrFail($id)->toArray();
+        $produit = Produit::with('fournisseurs')->findOrFail($id);
+        $this->editProduit = $produit->toArray();
         $this->newImage = null; // On réinitialise le champ de la nouvelle image
+        $this->reset('selectedFournisseur', 'fournisseurPrix', 'fournisseurDelai');
         $this->currentPage = PAGEEDITFORM;
     }
     public function updateProduit()
@@ -163,5 +176,39 @@ class ProduitComp extends Component
     public function deleteProduit($id){
         Produit::destroy($id);
         $this->dispatch("showSuccessMessage", ["message" => "Produit supprimé avec succès!"]);
+    }
+
+    // NOUVELLE MÉTHODE : Pour associer un fournisseur
+    public function addFournisseur()
+    {
+        $this->validate([
+            'selectedFournisseur' => 'required|exists:fournisseurs,id',
+            'fournisseurPrix' => 'required|numeric|min:0',
+            'fournisseurDelai' => 'nullable|integer|min:0',
+        ]);
+
+        $produit = Produit::find($this->editProduit['id']);
+        
+        // La méthode magique pour attacher, avec les données du pivot !
+        $produit->fournisseurs()->attach($this->selectedFournisseur, [
+            'prix_fournisseur' => $this->fournisseurPrix,
+            'delai_livraison_jours' => $this->fournisseurDelai,
+        ]);
+
+        // On rafraîchit les données et on vide les champs
+        $this->editProduit = $produit->fresh()->load('fournisseurs')->toArray();
+        $this->reset('selectedFournisseur', 'fournisseurPrix', 'fournisseurDelai');
+        $this->dispatch("showSuccessMessage", ["message" => "Fournisseur ajouté au produit."]);
+    }
+
+    // NOUVELLE MÉTHODE : Pour dissocier un fournisseur
+    public function detachFournisseur($fournisseurId)
+    {
+        $produit = Produit::find($this->editProduit['id']);
+        $produit->fournisseurs()->detach($fournisseurId);
+
+        // On rafraîchit les données
+        $this->editProduit = $produit->fresh()->load('fournisseurs')->toArray();
+        $this->dispatch("showSuccessMessage", ["message" => "Fournisseur retiré du produit."]);
     }
 }
