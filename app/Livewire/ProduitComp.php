@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use App\Models\Categorie;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Fournisseur;
+use App\Events\ProductStockUpdated;
 
 
 class ProduitComp extends Component
@@ -155,6 +156,9 @@ class ProduitComp extends Component
         // 3. On récupère le produit et on le met à jour.
         $produit = Produit::find($this->editProduit['id']);
         $produit->update($produitData);
+        // NOUVEAU : On déclenche l'événement de mise à jour du stock
+        ProductStockUpdated::dispatch($produit);
+        $this->dispatch('notification-received');
 
         // 4. On affiche le message de succès et on retourne à la liste.
         $this->dispatch("showSuccessMessage", ["message" => "Produit mis à jour avec succès!"]);

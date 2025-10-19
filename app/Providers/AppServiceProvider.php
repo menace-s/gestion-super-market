@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Event;
+use App\Events\ProductStockUpdated;
+use App\Listeners\CheckStockLevelListener;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +24,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+        // Event::listen(
+        //     ProductStockUpdated::class,
+        //     CheckStockLevelListener::class,
+        // );
     }
 }

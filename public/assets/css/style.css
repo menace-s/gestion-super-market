@@ -19,9 +19,12 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
 }
+.notification-unread {
+    background-color: #fcf1c2; /* Une couleur de fond très légère */
+}
 
 ::selection {
-  background: #fd0201;
+  background: #120fdb;
   color: #ffffff;
   text-shadow: none;
 }

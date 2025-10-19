@@ -47,7 +47,7 @@
         </li>
 
 
-        <!-- Notifications -->
+        {{-- <!-- Notifications -->
         <li class="nav-item dropdown nav-item-box">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                 <i data-feather="bell"></i><span class="badge rounded-pill">2</span>
@@ -82,7 +82,8 @@
                 </div>
             </div>
         </li>
-        <!-- /Notifications -->
+        <!-- /Notifications --> --}}
+        <livewire:notifications-bell />
 
         <li class="nav-item dropdown has-arrow main-drop">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">

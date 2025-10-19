@@ -163,7 +163,7 @@ public function handleDeleteFournisseur($id = null): void
         if ($term !== '') {
             $like = "%{$term}%";
             $q->where(function ($x) use ($like) {
-                $x->where('name','like',$like)
+                $x->where('name','like',$like) 
                   ->orWhere('email','like',$like)
                   ->orWhere('phone','like',$like)
                   ->orWhere('adress','like',$like);
