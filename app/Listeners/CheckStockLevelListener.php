@@ -31,13 +31,13 @@ class CheckStockLevelListener
         if ($produit->min_stock > 0 && $produit->quantity <= $produit->min_stock) {
             
             // On trouve le ou les utilisateurs à notifier.
-            // Pour l'instant, on prend le premier utilisateur comme exemple.
-            // Idéalement, tu filtrerais sur un rôle 'responsable de stock'.
-            $userToNotify = User::first(); // À adapter selon ta logique métier
+            // $stockManagers = User::role('Responsable Stocks')->get();
+            $usersToNotify = User::role(['Responsable Stocks', 'Administrateur'])->get();
 
-            if ($userToNotify) {
-                // On envoie la notification à l'utilisateur trouvé
-                Notification::send($userToNotify, new LowStockNotification($produit));
+            // On s'assure qu'il y a au moins un responsable à notifier
+            if ($usersToNotify->isNotEmpty()) {
+                // Laravel enverra la notification à chaque utilisateur de la collection
+                Notification::send($usersToNotify, new LowStockNotification($produit));
             }
         }
     }

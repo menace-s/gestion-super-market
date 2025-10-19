@@ -71,7 +71,7 @@ class ProduitComp extends Component
     {
         // Carbon::setLocale('fr');
         // Note : $categories est maintenant géré par une propriété calculée, c'est plus propre
-        // $categories = Categorie::orderBy('name')->get();
+        $categories = Categorie::orderBy('name')->get();
 
         return view('livewire.produit.index', [
             'produits' => Produit::with('category')
@@ -91,7 +91,7 @@ class ProduitComp extends Component
                 
             // 'categories' est déjà disponible via la propriété calculée,
             // mais si tu ne l'as pas encore fait, tu peux laisser la ligne ci-dessous :
-            // 'categories' => $categories,
+            'categories' => $categories,
         ])
         ->extends('layouts.app')
         ->section('content');
