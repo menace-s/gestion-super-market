@@ -13,39 +13,55 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        // Créer des permissions
-        Permission::create(['name' => 'Chauffeurs']);
-        Permission::create(['name' => 'Ajouter Chauffeurs']);
-        Permission::create(['name' => 'Modifier chauffeurs']);
-        Permission::create(['name' => 'Supprimer chauffeurs']);
-        Permission::create(['name' => 'Usagers']);
-        Permission::create(['name' => 'Modifier usagers']);
-        Permission::create(['name' => 'Ajouter usagers']);
-        Permission::create(['name' => 'Supprimer usagers']);
-        Permission::create(['name' => 'Qr-code']);
-        Permission::create(['name' => 'Transactions']);
-        Permission::create(['name' => 'Paiements']);
-        Permission::create(['name' => 'Permission & rôle']);
-        Permission::create(['name' => 'Attribution rôle']);
-        Permission::create(['name' => 'Ajouter un rôle']);
-        Permission::create(['name' => 'Modifier un rôle']);
-        Permission::create(['name' => 'Supprimer un rôle']);
-        Permission::create(['name' => 'utilisateurs']);
-        Permission::create(['name' => 'Ajouter un utilisateur']);
-        Permission::create(['name' => 'Modifier un utilisateur']);
-        Permission::create(['name' => 'Supprimer un utilisateur']);
-        Permission::create(['name' => 'profil']);
-        Permission::create(['name' => 'support']);
-        Permission::create(['name' => 'documentation']);
-        Permission::create(['name' => 'notification']);
+        // BONNE PRATIQUE : Réinitialiser le cache des permissions et des rôles
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Créer des rôles et attribuer des permissions
-        $roleSuperAdmin = Role::create(['name' => 'SuperAdmin']);
+        // --- Créer les Permissions ---
 
-        // Attribuer des permissions aux rôles
-        $roleSuperAdmin->givePermissionTo([
-            'Chauffeurs', 'Usagers',  'Qr-code', 'Transactions', 'notification', 'utilisateurs',
-            'profil', 'support', 'documentation'  ,  'Paiements', 'Permission & rôle' , 'Attribution rôle',
+        // Permissions pour le Tableau de Bord
+        Permission::create(['name' => 'voir tableau de bord']);
+
+        // Permissions pour les Produits
+        Permission::create(['name' => 'voir produits']);
+        Permission::create(['name' => 'créer produits']);
+        Permission::create(['name' => 'modifier produits']);
+        Permission::create(['name' => 'supprimer produits']);
+        Permission::create(['name' => 'voir prix achat']); // Permission sensible
+
+        // Permissions pour les Catégories
+        Permission::create(['name' => 'gérer catégories']);
+
+        // Permissions pour les Fournisseurs
+        Permission::create(['name' => 'gérer fournisseurs']);
+        
+        // Permissions pour les Commandes (future fonctionnalité)
+        Permission::create(['name' => 'gérer commandes fournisseurs']);
+
+        // Permissions pour l'Administration
+        Permission::create(['name' => 'gérer utilisateurs']);
+        Permission::create(['name' => 'gérer rôles et permissions']);
+
+        // --- Créer les Rôles ---
+        $roleStockManager = Role::create(['name' => 'Responsable Stocks']);
+        $roleAdmin = Role::create(['name' => 'Administrateur']);
+
+        // --- Attribuer les Permissions aux Rôles ---
+
+        // Le Responsable des Stocks a accès à tout ce qui est opérationnel
+        $roleStockManager->givePermissionTo([
+            'voir tableau de bord',
+            'voir produits',
+            'créer produits',
+            'modifier produits',
+            'supprimer produits',
+            'voir prix achat',
+            'gérer catégories',
+            'gérer fournisseurs',
+            'gérer commandes fournisseurs',
         ]);
+
+        // L'Administrateur a accès à TOUT
+        // La méthode givePermissionTo(Permission::all()) est un raccourci de pro.
+        $roleAdmin->givePermissionTo(Permission::all());
     }
 }

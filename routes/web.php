@@ -1,77 +1,83 @@
 <?php
 
-use App\Livewire\ChatComp;
-use App\Livewire\ProfilComp;
-use App\Livewire\UtilisateurComp;
-use App\Livewire\PermissionRoleComp;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Livewire\CategorieComp;
 use App\Livewire\ClientComp;
 use App\Livewire\FournisseurComp;
 use App\Livewire\InventaireComp;
 use App\Livewire\MouvementStockComp;
+use App\Livewire\PermissionRoleComp;
 use App\Livewire\ProduitComp;
+use App\Livewire\ProfilComp;
+use App\Livewire\UtilisateurComp;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('welcome');
 
-
-// Le groupe des routes relatives aux administrateurs
+// Groupe principal pour les utilisateurs authentifiés
 Route::group([
     "middleware" => ["auth"],
     "as" => "admin."
-], function(){
+], function () {
 
-
-
+    // --- GESTION DU STOCK ---
     Route::group([
-        "prefix" => "habilitations",
-        "as" => "habilitations."
-    ], function(){
-        Route::get("/utilisateurs", UtilisateurComp::class)
-            ->name("users.index")
-            ->middleware('can:utilisateurs');
+        "prefix" => "stock",
+        "as" => "stock."
+    ], function () {
+        Route::get("/produits", ProduitComp::class)
+            ->name("produits.index")
+            ->middleware('can:voir produits');
+
+        Route::get("/categories", CategorieComp::class)
+            ->name("categories.index")
+            ->middleware('can:gérer catégories');
+
+        Route::get("/fournisseurs", FournisseurComp::class)
+            ->name("fournisseurs.index")
+            ->middleware('can:gérer fournisseurs');
+        
+        // Note : Ajoute ces permissions dans ton seeder
+        Route::get("/inventaires", InventaireComp::class)
+            ->name("inventaires.index")
+            ->middleware('can:gérer inventaires');
+
+        Route::get("/mouvements", MouvementStockComp::class)
+            ->name("mouvements.index")
+            ->middleware('can:gérer inventaires');
     });
 
+    // --- GESTION DES CLIENTS ---
+    // Note : Ajoute cette permission dans ton seeder
+    Route::get("/clients", ClientComp::class)
+        ->name("clients.index")
+        ->middleware('can:gérer clients');
 
-    Route::get("/profil", ProfilComp::class)
-            ->name("profil")
-            ->middleware('can:profil');
+    // --- ADMINISTRATION ET HABILITATIONS ---
+    Route::group([
+        "prefix" => "administration",
+        "as" => "administration."
+    ], function () {
+        Route::get("/utilisateurs", UtilisateurComp::class)
+            ->name("users.index")
+            ->middleware('can:gérer utilisateurs');
 
+        Route::get("/roles-permissions", PermissionRoleComp::class)
+            ->name("roles.index")
+            ->middleware('can:gérer rôles et permissions');
+    });
 
-
-    Route::get("/rôle-permission", PermissionRoleComp::class)
-            ->name("rôle-permission")
-            ->middleware('can:Permission & rôle');
-
-
-    Route::get("/produit", ProduitComp::class)
-            ->name("produit")
-            ->middleware('can:Permission & rôle');
-
-
-    Route::get("/categorie", CategorieComp::class)
-                ->name("categorie")
-                ->middleware('can:Permission & rôle');
-
-    Route::get("/inventaire", InventaireComp::class)
-            ->name("inventaire")
-            ->middleware('can:Permission & rôle');
-
-    Route::get("/mouvement_stock", MouvementStockComp::class)
-            ->name("mouvement_stock")
-            ->middleware('can:Permission & rôle');
-
-    Route::get("/fournisseur", FournisseurComp::class)
-            ->name("fournisseur")
-            ->middleware('can:Permission & rôle');
-
-    Route::get("/client", ClientComp::class)
-            ->name("client")
-            ->middleware('can:Permission & rôle');
-
+    // --- PROFIL UTILISATEUR ---
+    // Pas besoin de permission spécifique, tout utilisateur connecté peut voir son profil.
+    Route::get("/profil", ProfilComp::class)->name("profil");
 
 });

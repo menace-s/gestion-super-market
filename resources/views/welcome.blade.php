@@ -177,7 +177,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title mb-0">Derniers inscrits</h4>
                     <div class="view-all-link">
-                        <a href="{{ route('admin.habilitations.users.index') }}" class="view-all d-flex align-items-center">
+                        <a href="{{ route('admin.administration.users.index') }}" class="view-all d-flex align-items-center">
                             Voir tout<span class="ps-2 d-flex align-items-center"><i data-feather="arrow-right" class="feather-16"></i></span>
                         </a>
                     </div>

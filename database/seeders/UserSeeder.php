@@ -14,24 +14,30 @@ class UserSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void
-    { 
-
-
-             // Créer un utilisateur admin
-        $superAdmin = User::updateOrCreate(
-            ['email' => 'admin@admin.com'],
+    {
+        // --- 1. Création de l'Utilisateur ADMINISTRATEUR ---
+        $adminUser = User::updateOrCreate(
+            ['email' => 'admin@g-stock.com'], // Clé unique pour la recherche
             [
-                'name' => 'adminnistrateur',
-                'email' => 'admin@admin.com',
-                'password' => bcrypt('Bonjour@2025'),
-                'phone' =>'+2250555129163',
+                'name' => 'Admin G-Stock',
+                'password' => bcrypt('password'), // Change ce mot de passe !
+                'phone' => '+2250102030405',
             ]
         );
+        // On assigne le rôle 'Administrateur'
+        $adminUser->assignRole('Administrateur');
 
 
-         // Assigner le rôle admin à cet utilisateur
-         $superAdmin->assignRole('superAdmin');
-
-
+        // --- 2. Création de l'Utilisateur RESPONSABLE STOCKS ---
+        $stockUser = User::updateOrCreate(
+            ['email' => 'stock@g-stock.com'], // Clé unique pour la recherche
+            [
+                'name' => 'Responsable Stocks',
+                'password' => bcrypt('password'), // Change ce mot de passe !
+                'phone' => '+2250708091011',
+            ]
+        );
+        // On assigne le rôle 'Responsable Stocks'
+        $stockUser->assignRole('Responsable Stocks');
     }
 }
