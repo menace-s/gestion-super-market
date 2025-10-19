@@ -10,7 +10,7 @@
     <div class="dropdown-menu notifications">
         <div class="topnav-dropdown-header">
             <span class="notification-title">Notifications</span>
-            <a href="javascript:void(0)" wire:click.prevent="markAllAsRead" class="clear-noti"> Marquer tout comme lu </a>
+            <a href="javascript:void(0)" wire:click.prevent="clearAll" class="clear-noti"> Marquer tout comme lu </a>
         </div>
         <div class="noti-content">
             <ul class="notification-list">

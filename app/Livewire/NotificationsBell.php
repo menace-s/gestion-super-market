@@ -38,6 +38,17 @@ class NotificationsBell extends Component
         Auth::user()->unreadNotifications->markAsRead();
         $this->mount(); // On rafraîchit le compteur
     }
+    public function clearAll()
+    {
+        if (Auth::check()) {
+            // 1. On supprime toutes les notifications de la base de données
+            Auth::user()->notifications()->delete();
+
+            // 2. On met à jour l'état du composant pour un rafraîchissement instantané
+            $this->unreadCount = 0;
+        }
+    }
+    
 
     public function render()
     {

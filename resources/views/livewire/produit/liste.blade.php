@@ -30,6 +30,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-check form-switch">
+                    <input 
+                        class="form-check-input" 
+                        type="checkbox" 
+                        role="switch" 
+                        id="lowStockFilter"
+                        wire:model.live="showLowStockOnly"
+                    >
+                    <label class="form-check-label" for="lowStockFilter">Afficher les produits en manque</label>
+                </div>
             </div>
         </div>
         <div class="card-body">

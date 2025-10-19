@@ -12,7 +12,7 @@ use App\Models\Categorie;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Fournisseur;
 use App\Events\ProductStockUpdated;
-
+use Illuminate\Database\Eloquent\Builder;
 
 class ProduitComp extends Component
 {
@@ -31,6 +31,7 @@ class ProduitComp extends Component
     public $selectedFournisseur;
     public $fournisseurPrix;
     public $fournisseurDelai;
+    public $showLowStockOnly = false;
     
     public function getAllFournisseursProperty()
     {
@@ -69,19 +70,31 @@ class ProduitComp extends Component
     public function render()
     {
         // Carbon::setLocale('fr');
-        $searchCriteria = '%' . $this->search . '%';
-        $categories = Categorie::orderBy('name')->get();
+        // Note : $categories est maintenant géré par une propriété calculée, c'est plus propre
+        // $categories = Categorie::orderBy('name')->get();
 
         return view('livewire.produit.index', [
-            'produits' => Produit::where('name', 'like', $searchCriteria)
-                ->orWhere('sku', 'like', $searchCriteria)
-                ->orWhere('description', 'like', $searchCriteria)
-                ->orderBy('id', 'desc')
+            'produits' => Produit::with('category')
+                // On groupe les conditions de recherche pour une requête propre et sans bug
+                ->where(function (Builder $query) {
+                    $searchCriteria = '%' . $this->search . '%';
+                    $query->where('name', 'like', $searchCriteria)
+                        ->orWhere('sku', 'like', $searchCriteria)
+                        ->orWhere('description', 'like', $searchCriteria);
+                })
+                // On ajoute notre filtre conditionnel pour le stock faible
+                ->when($this->showLowStockOnly, function (Builder $query) {
+                    $query->whereColumn('quantity', '<=', 'min_stock');
+                })
+                ->latest() // 'latest()' est un alias plus lisible pour orderBy('created_at', 'desc')
                 ->paginate(10),
-            'categories' => $categories,
+                
+            // 'categories' est déjà disponible via la propriété calculée,
+            // mais si tu ne l'as pas encore fait, tu peux laisser la ligne ci-dessous :
+            // 'categories' => $categories,
         ])
         ->extends('layouts.app')
-            ->section('content');
+        ->section('content');
     }
     public function showProduit($id){
         $this->viewProduit = Produit::with(['category', 'fournisseurs'])->findOrFail($id);
@@ -214,5 +227,9 @@ class ProduitComp extends Component
         // On rafraîchit les données
         $this->editProduit = $produit->fresh()->load('fournisseurs')->toArray();
         $this->dispatch("showSuccessMessage", ["message" => "Fournisseur retiré du produit."]);
+    }
+    public function updatingShowLowStockOnly()
+    {
+        $this->resetPage();
     }
 }
