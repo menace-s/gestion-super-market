@@ -10,6 +10,7 @@ use App\Livewire\PermissionRoleComp;
 use App\Livewire\ProduitComp;
 use App\Livewire\ProfilComp;
 use App\Livewire\UtilisateurComp;
+use App\Livewire\CommandeFournisseurComp;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +55,10 @@ Route::group([
         Route::get("/mouvements", MouvementStockComp::class)
             ->name("mouvements.index")
             ->middleware('can:gérer inventaires');
+        
+        Route::get("/commandes-fournisseurs", CommandeFournisseurComp::class)
+            ->name("commandes.index")
+            ->middleware('can:gérer commandes fournisseurs');
     });
 
     // --- GESTION DES CLIENTS ---

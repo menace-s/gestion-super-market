@@ -70,7 +70,7 @@ class ProduitComp extends Component
     public function render()
     {
         // Carbon::setLocale('fr');
-        // Note : $categories est maintenant géré par une propriété calculée, c'est plus propre
+        
         $categories = Categorie::orderBy('name')->get();
 
         return view('livewire.produit.index', [

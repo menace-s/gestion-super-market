@@ -33,6 +33,12 @@
                             </a>
                         </li>
                         @endcan
+
+                        @can('gérer commandes fournisseurs')
+                        <li class="{{ setMenuActive('admin.stock.commandes.index') }}">
+                            <a href="{{ route('admin.stock.commandes.index') }}"><i data-feather="shopping-cart"></i><span>Commandes</span></a>
+                        </li>
+                        @endcan
                         
                         @can('gérer inventaires')
                         <li class="{{ setMenuActive('admin.stock.mouvements.index') }}">
