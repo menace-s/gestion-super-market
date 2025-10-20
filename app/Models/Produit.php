@@ -34,4 +34,10 @@ class Produit extends Model
                     ->withPivot('prix_fournisseur', 'delai_livraison_jours')
                     ->withTimestamps();
     }
+    public function commandeFournisseurs()
+    {
+        return $this->belongsToMany(CommandeFournisseur::class, 'commande_fournisseur_produit')
+                    ->withPivot('quantite_commandee', 'prix_unitaire')
+                    ->withTimestamps();
+    }
 }

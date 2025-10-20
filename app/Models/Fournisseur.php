@@ -20,7 +20,15 @@ class Fournisseur extends Model
         'phone',
         'adress',
     ];
+    public function commandes()
+    {
+        return $this->hasMany(CommandeFournisseur::class);
+    }
 
+    /**
+     * Récupère tous les produits que ce fournisseur peut fournir.
+     * (Relation N-M, déjà définie)
+     */
     public function produits()
     {
         return $this->belongsToMany(Produit::class, 'fournisseur_produit')
