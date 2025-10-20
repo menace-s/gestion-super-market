@@ -125,7 +125,7 @@ class CommandeFournisseurComp extends Component
         $validatedData = $this->validate([
             'edit_fournisseur_id' => 'required|exists:fournisseurs,id',
             'edit_date_commande' => 'required|date',
-            'edit_statut' => 'required|in:brouillon,envoyee,recue,annulee',
+            'edit_statut' => 'required|in:brouillon,envoyee,receptionnee,annulee',
             'edit_notes' => 'nullable|string',
         ]);
 

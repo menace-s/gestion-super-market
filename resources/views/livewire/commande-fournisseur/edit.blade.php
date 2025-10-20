@@ -50,7 +50,7 @@
                         <select class="form-select" wire:model="edit_statut">
                             <option value="brouillon">Brouillon</option>
                             <option value="envoyee">Envoyée</option>
-                            <option value="recue">Reçue</option>
+                            <option value="receptionnee">receptionnée</option>
                             <option value="annulee">Annulée</option>
                         </select>
                         @error('edit_statut') 
